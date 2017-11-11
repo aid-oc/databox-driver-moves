@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('databox-driver-moves:server');
 var http = require('http');
+//var databox = require('node-databox');
 
 /**
  * Get port from environment and store in Express.
@@ -16,7 +17,7 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTPS server.
  */
 
 var server = http.createServer(app);

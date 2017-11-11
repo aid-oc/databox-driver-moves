@@ -4,11 +4,16 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//var databox = require('node-databox');
+var fs = require('fs');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+// JSON Store
+//var DATABOX_STORE_BLOB_ENDPOINT = process.env.DATABOX_STORE_ENDPOINT;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,10 +42,29 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
+
+/*
+function getPastDayData() {
+
+}
+
+// Wait until store is ready and then initalise it
+databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() => {
+  databox.catalog.registerDatasource(
+    DATABOX_STORE_BLOB_ENDPOINT, {
+              description: 'Moves API Storage',
+              contentType: 'text/json',
+              vendor: 'Databox Inc.',
+              type: 'movesApiStorage',
+              datasourceid: 'MovesApiStorage',
+              storeType: 'databox-store-blob',
+            });
+});
+*/
+
 
 module.exports = app;
