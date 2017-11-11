@@ -2,20 +2,19 @@ var express = require('express');
 var router = express.Router();
 var app = require('../app.js');
 var movesApi = require('moves-api').MovesApi;
+
 var moves = new movesApi({
-    "clientId": "9ko4K08GS9BKuFVej6Zw9SZTiVWvscHp",
-    "clientSecret": "qeIdV7DIi0Uk0OLeF2aDT4XIU_zZSxBbQ3PltGiE4cPEHo6i0M6eP4j9RGrj6__h",
+    "clientId": "",
+    "clientSecret": "",
     "redirectUri": "http://localhost:3000/token",
     "accessToken": "",
     "refreshToken" : "",
 });
 
-/* GET home page. */
+// Entry point, form for credentials input
 router.get('/', function(req, res, next) {
   if (moves.options.accessToken == "") {
-    // Redirect to start auth process
-    var url = moves.generateAuthUrl();
-    res.redirect(url);
+    res.render('index', {"title" : "Moves Driver"});
   } else {
     var placesOptions = {
       "date": "20171111"
@@ -24,22 +23,38 @@ router.get('/', function(req, res, next) {
       if (err) {
         res.json(err);
       } else {
-        res.json(body);
+        res.render('places', {"title" : "Moves Driver", "placesData" : body});
       }
     });
   }
-
 });
 
+/* Auth route, will create an auth code and redirect to /token, where a token is created and stored */
+router.post('/auth', function(req, res, next) {
+  if (moves.options.accessToken == "") {
+    moves.options.clientId = req.body.clientId;
+    moves.options.clientSecret = req.body.clientSecret;
+    // Redirect to start auth process
+    var url = moves.generateAuthUrl();
+    // Will redirect to /token with auth code
+    res.redirect(url);
+  } else {
+    res.redirect("/");
+  }
+});
+
+/* Create a token from the current auth code, store it and redirect to show data */
 router.get('/token', function(req, res, next) {
   // Return to here with an access code, exchange for token
   moves.getAccessToken(req.query.code, function(err, authData) {
+    if (err) {
+      console.log(err);
+      res.json(err);
+    } else {
       moves.options.accessToken = authData.access_token;
-      moves.getProfile(function(err, profile) {
-          console.log("Connected to Profile: " + profile);
-          res.redirect("/");
-      });
-    });
+      res.redirect("/");
+    }
+  });
 });
 
 
