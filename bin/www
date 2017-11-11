@@ -19,7 +19,7 @@ app.set('port', port);
 /**
  * Create HTTPS server.
  */
-
+//var creds = databox.getHttpsCredentials();
 var server = http.createServer(app);
 
 /**
