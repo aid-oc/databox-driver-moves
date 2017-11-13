@@ -6,13 +6,13 @@ var movesApi = require('moves-api').MovesApi;
 var moves = new movesApi({
     "clientId": "",
     "clientSecret": "",
-    "redirectUri": "http://localhost:3000/token",
+    "redirectUri": "http://localhost:8080/ui/token",
     "accessToken": "",
     "refreshToken" : "",
 });
 
 // Entry point, form for credentials input
-router.get('/', function(req, res, next) {
+router.get('/ui', function(req, res, next) {
   if (moves.options.accessToken == "") {
     res.render('index', {"title" : "Moves Driver"});
   } else {
@@ -30,7 +30,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* Auth route, will create an auth code and redirect to /token, where a token is created and stored */
-router.post('/auth', function(req, res, next) {
+router.post('/ui/auth', function(req, res, next) {
   if (moves.options.accessToken == "") {
     moves.options.clientId = req.body.clientId;
     moves.options.clientSecret = req.body.clientSecret;
@@ -44,7 +44,7 @@ router.post('/auth', function(req, res, next) {
 });
 
 /* Create a token from the current auth code, store it and redirect to show data */
-router.get('/token', function(req, res, next) {
+router.get('/ui/token', function(req, res, next) {
   // Return to here with an access code, exchange for token
   moves.getAccessToken(req.query.code, function(err, authData) {
     if (err) {
