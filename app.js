@@ -48,6 +48,7 @@ app.use(function(err, req, res, next) {
 
 // Wait until store is ready and then initalise it
 databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() => {
+  console.log("DEBUG: Moves-Driver - registerDatasource()");
   databox.catalog.registerDatasource(
     DATABOX_STORE_BLOB_ENDPOINT, {
               description: 'Moves API Storage',
