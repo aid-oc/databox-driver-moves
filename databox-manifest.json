@@ -1,0 +1,27 @@
+{
+	"manifest-version": 1,
+
+	"name": "driver-moves",
+	"databox-type": "driver",
+	"version": "0.1.0",
+
+	"description": "A driver for the Moves API.",
+	"author": "Aidan O'Connell <psyao1@nottingham.ac.uk>",
+	"license": "MIT",
+	"tags": [
+		"fitbit",
+		"gloang"
+	],
+
+	"homepage": "https://github.com/psyaoc/databox-driver-moves",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/psyaoc/databox-driver-moves"
+	},
+
+
+	"resource-requirements": {
+		"store": ["store-json"]
+	}
+
+}
