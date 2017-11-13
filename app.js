@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-//var databox = require('node-databox');
+var databox = require('node-databox');
 var fs = require('fs');
 
 var index = require('./routes/index');
@@ -12,7 +12,7 @@ var index = require('./routes/index');
 var app = express();
 
 // JSON Store
-//var DATABOX_STORE_BLOB_ENDPOINT = process.env.DATABOX_STORE_ENDPOINT;
+var DATABOX_STORE_BLOB_ENDPOINT = process.env.DATABOX_STORE_ENDPOINT;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -45,7 +45,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-/*
+
 // Wait until store is ready and then initalise it
 databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() => {
   databox.catalog.registerDatasource(
@@ -59,6 +59,5 @@ databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() =
             });
 });
 
-*/
 
 module.exports = app;
