@@ -9,8 +9,9 @@
 	"author": "Aidan O'Connell <psyao1@nottingham.ac.uk>",
 	"license": "MIT",
 	"tags": [
-		"fitbit",
-		"gloang"
+		"moves",
+		"javascript",
+    "driver"
 	],
 
 	"homepage": "https://github.com/psyaoc/databox-driver-moves",
