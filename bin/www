@@ -6,7 +6,7 @@
 
 var app = require('../app');
 var debug = require('debug')('databox-driver-moves:server');
-var http = require('http');
+var https = require('https');
 //var databox = require('node-databox');
 
 /**
@@ -22,8 +22,8 @@ app.set('port', port);
 /**
  * Create HTTPS server.
  */
-//var creds = databox.getHttpsCredentials();
-var server = http.createServer(app);
+var creds = databox.getHttpsCredentials();
+var server = https.createServer(creds, app);
 
 /**
  * Listen on provided port, on all network interfaces.
