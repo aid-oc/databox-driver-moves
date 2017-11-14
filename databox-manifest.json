@@ -1,6 +1,6 @@
 {
 	"manifest-version": 1,
-	"name": "driver-moves",
+	"name": "databox-driver-moves",
 	"databox-type": "driver",
 	"version": "0.1.0",
 	"description": "A driver for the Moves API.",
