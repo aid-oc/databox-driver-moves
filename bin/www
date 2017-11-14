@@ -13,9 +13,6 @@ var databox = require('node-databox');
  * Get port from environment and store in Express.
  */
 
- console.log("In WWW!");
-
-
 var port = normalizePort('8080');
 app.set('port', port);
 

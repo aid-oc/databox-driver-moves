@@ -12,7 +12,7 @@ var moves = new movesApi({
 });
 
 // Entry point, form for credentials input
-router.get('/ui', function(req, res, next) {
+router.get('/', function(req, res, next) {
   if (moves.options.accessToken == "") {
     res.render('index', {"title" : "Moves Driver"});
   } else {
@@ -30,7 +30,7 @@ router.get('/ui', function(req, res, next) {
 });
 
 /* Auth route, will create an auth code and redirect to /token, where a token is created and stored */
-router.post('/ui/auth', function(req, res, next) {
+router.post('/auth', function(req, res, next) {
   if (moves.options.accessToken == "") {
     moves.options.clientId = req.body.clientId;
     moves.options.clientSecret = req.body.clientSecret;
@@ -44,7 +44,7 @@ router.post('/ui/auth', function(req, res, next) {
 });
 
 /* Create a token from the current auth code, store it and redirect to show data */
-router.get('/ui/token', function(req, res, next) {
+router.get('/token', function(req, res, next) {
   // Return to here with an access code, exchange for token
   moves.getAccessToken(req.query.code, function(err, authData) {
     if (err) {
