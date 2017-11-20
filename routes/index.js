@@ -21,7 +21,7 @@ function verifyAccessToken() {
 }
 
 // Entry point, form for credentials input
-router.get('/', function(req, res, next) {
+router.get('/ui', function(req, res, next) {
   // Just check if we have anything
   verifyAccessToken();
   if (moves.options.accessToken == "") {
