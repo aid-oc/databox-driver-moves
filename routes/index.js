@@ -7,7 +7,7 @@ var storeHref = process.env.DATABOX_STORE_ENDPOINT;
 var moves = new movesApi({
     "clientId": "",
     "clientSecret": "",
-    "redirectUri": "http://127.0.0.1:8989/#!/databox-driver-moves/ui/token",
+    "redirectUri": "http://127.0.0.1:8989/#!/databox-driver-moves/authtoken",
     "accessToken": "",
     "refreshToken" : "",
 });
@@ -40,7 +40,7 @@ router.get('/ui', function(req, res, next) {
   }
 });
 
-/* Auth route, will create an auth code and redirect to /token, where a token is created and stored */
+/* Auth route, will create an auth code and redirect to /authtoken, where a token is created and stored */
 router.post('/auth', function(req, res, next) {
   if (moves.options.accessToken == "") {
     moves.options.clientId = req.body.clientId;
@@ -55,7 +55,7 @@ router.post('/auth', function(req, res, next) {
 });
 
 /* Create a token from the current auth code, store it and redirect to show data */
-router.get('/token', function(req, res, next) {
+router.get('/authtoken', function(req, res, next) {
   // Return to here with an access code, exchange for token
   moves.getAccessToken(req.query.code, function(err, authData) {
     if (err) {
