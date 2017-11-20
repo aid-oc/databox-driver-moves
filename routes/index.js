@@ -49,6 +49,7 @@ router.get('/auth', function(req, res, next) {
     moves.options.clientSecret = req.query.clientSecret;
     // Redirect to start auth process
     var url = moves.generateAuthUrl();
+    console.log("Attempting to redirect to: " + url);
     // Will redirect to /token with auth code
     res.redirect(url);
   } else {
