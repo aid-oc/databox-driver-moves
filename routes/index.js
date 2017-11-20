@@ -45,8 +45,8 @@ router.get('/', function(req, res, next) {
 router.get('/auth', function(req, res, next) {
   console.log("In /auth");
   if (moves.options.accessToken == "") {
-    moves.options.clientId = req.params.clientId;
-    moves.options.clientSecret = req.params.clientSecret;
+    moves.options.clientId = req.query.clientId;
+    moves.options.clientSecret = req.query.clientSecret;
     // Redirect to start auth process
     var url = moves.generateAuthUrl();
     // Will redirect to /token with auth code
