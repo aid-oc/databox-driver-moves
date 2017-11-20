@@ -46,6 +46,11 @@ app.use(function(err, req, res, next) {
 });
 
 
+function verifyAccessToken() {
+  // Debug: Find out what's in here
+  console.log(JSON.stringify(process.env));
+}
+
 // Wait until store is ready and then initalise it
 databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() => {
   console.log("DEBUG: Moves-Driver - registerDatasource()");
@@ -58,7 +63,7 @@ databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() =
               datasourceid: 'MovesApiStorage',
               storeType: 'databox-store-blob',
             });
-});
+}).then(verifyAccessToken);
 
 
 module.exports = app;
