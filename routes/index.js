@@ -22,7 +22,7 @@ function verifyAccessToken() {
 
 // Entry point, form for credentials input
 router.get('/', function(req, res, next) {
-  Console.log("In /");
+  console.log("In /");
   // Just check if we have anything
   verifyAccessToken();
   if (moves.options.accessToken == "") {
