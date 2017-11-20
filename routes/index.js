@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var app = require('../app.js');
 var movesApi = require('moves-api').MovesApi;
-
+var databox = require('node-databox');
+var storeHref = process.env.DATABOX_STORE_ENDPOINT;
 var moves = new movesApi({
     "clientId": "",
     "clientSecret": "",
@@ -11,8 +12,18 @@ var moves = new movesApi({
     "refreshToken" : "",
 });
 
+function verifyAccessToken() {
+  databox.keyValue.read(storeHref, 'movesToken').then((res) => {
+    console.log("Token found: " + res);
+  }).catch(() => {
+    console.log("No access token found");
+  });
+}
+
 // Entry point, form for credentials input
 router.get('/', function(req, res, next) {
+  // Just check if we have anything
+  verifyAccessToken();
   if (moves.options.accessToken == "") {
     res.render('index', {"title" : "Moves Driver"});
   } else {
@@ -52,6 +63,11 @@ router.get('/token', function(req, res, next) {
       res.json(err);
     } else {
       moves.options.accessToken = authData.access_token;
+      databox.keyValue.write(storeHref, 'movesToken', authData.access_token).then((res) => {
+        console.log("Token stored: " + res);
+      }).catch(() => {
+        console.log("Failed to store token");
+      });
       res.redirect("/");
     }
   });

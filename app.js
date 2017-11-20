@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var databox = require('node-databox');
 var fs = require('fs');
+var movesApi = require('moves-api').MovesApi;
 
 var index = require('./routes/index');
 
@@ -13,6 +14,7 @@ var app = express();
 
 // JSON Store
 var DATABOX_STORE_BLOB_ENDPOINT = process.env.DATABOX_STORE_ENDPOINT;
+var hasValidToken = false;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,13 +48,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-function verifyAccessToken() {
-  var storeHref = process.env.DATABOX_STORE_ENDPOINT;
-  databox.keyValue.read(storeHref, 'movesToken').then((res) => {
-    console.log(res);
-  });
-}
-
 // Wait until store is ready and then initalise it
 databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() => {
   console.log("DEBUG: Moves-Driver - registerDatasource()");
@@ -65,7 +60,7 @@ databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() =
               datasourceid: 'MovesApiStorage',
               storeType: 'databox-store-blob',
             });
-}).then(verifyAccessToken);
+});
 
 
 module.exports = app;
