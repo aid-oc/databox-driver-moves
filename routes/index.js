@@ -42,11 +42,11 @@ router.get('/', function(req, res, next) {
 });
 
 /* Auth route, will create an auth code and redirect to /authtoken, where a token is created and stored */
-router.post('/auth', function(req, res, next) {
+router.get('/ui/auth', function(req, res, next) {
   console.log("In /auth");
   if (moves.options.accessToken == "") {
-    moves.options.clientId = req.body.clientId;
-    moves.options.clientSecret = req.body.clientSecret;
+    moves.options.clientId = req.params.clientId;
+    moves.options.clientSecret = req.params.clientSecret;
     // Redirect to start auth process
     var url = moves.generateAuthUrl();
     // Will redirect to /token with auth code
