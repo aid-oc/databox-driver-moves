@@ -47,8 +47,10 @@ app.use(function(err, req, res, next) {
 
 
 function verifyAccessToken() {
-  // Debug: Find out what's in here
-  console.log(JSON.stringify(process.env));
+  var storeHref = process.env.DATABOX_STORE_ENDPOINT;
+  databox.keyValue.read(storeHref, 'movesToken').then((res) => {
+    console.log(res);
+  });
 }
 
 // Wait until store is ready and then initalise it
