@@ -7,7 +7,7 @@ var storeHref = process.env.DATABOX_STORE_ENDPOINT;
 var moves = new movesApi({
     "clientId": "",
     "clientSecret": "",
-    "redirectUri": "http://localhost:8080/ui/token",
+    "redirectUri": "http://127.0.0.1:8989/#!/databox-driver-moves/ui/token",
     "accessToken": "",
     "refreshToken" : "",
 });
