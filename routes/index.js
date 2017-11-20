@@ -7,7 +7,7 @@ var storeHref = process.env.DATABOX_STORE_ENDPOINT;
 var moves = new movesApi({
     "clientId": "",
     "clientSecret": "",
-    "redirectUri": "http://127.0.0.1:8989/#!/databox-driver-moves/authtoken",
+    "redirectUri": "http://127.0.0.1:8989/#!/databox-driver-moves/ui/authtoken",
     "accessToken": "",
     "refreshToken" : "",
 });
@@ -21,7 +21,7 @@ function verifyAccessToken() {
 }
 
 // Entry point, form for credentials input
-router.get('/ui', function(req, res, next) {
+router.get('/', function(req, res, next) {
   // Just check if we have anything
   verifyAccessToken();
   if (moves.options.accessToken == "") {
