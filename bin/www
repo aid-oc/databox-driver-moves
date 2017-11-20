@@ -20,6 +20,7 @@ app.set('port', port);
  * Create HTTPS server.
  */
 var creds = databox.getHttpsCredentials();
+creds.rejectUnauthorized = false;
 var server = https.createServer(creds, app);
 
 /**
