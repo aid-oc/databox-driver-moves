@@ -29,7 +29,7 @@ function verifyAccessToken() {
           moves.options.clientId = appCreds.id;
           moves.options.clientSecret = appCreds.secret;
           // Attempt token refresh using stored app credentials
-          moves.refreshToken(err, authData) {
+          moves.refreshToken(function(err, authData) {
             if (err) {
               console.log("Token Refresh Error: " + err);
               moves.options.access_token = "";
@@ -37,7 +37,7 @@ function verifyAccessToken() {
               console.log("Token Refreshed");
               moves.options.accessToken = authData.access_token;
             }
-          }
+          });
         } else {
           moves.options.access_token = "";
         }
