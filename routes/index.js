@@ -60,6 +60,7 @@ router.post('/auth', function(req, res, next) {
 /* Create a token from the current auth code, store it and redirect to show data */
 router.get('/authtoken', function(req, res, next) {
   console.log("In /authtoken");
+  /*
   // Return to here with an access code, exchange for token
   moves.getAccessToken(req.query.code, function(err, authData) {
     if (err) {
@@ -75,6 +76,8 @@ router.get('/authtoken', function(req, res, next) {
       res.redirect("/");
     }
   });
+  */
+  res.send('Auth Token Page');
 });
 
 
