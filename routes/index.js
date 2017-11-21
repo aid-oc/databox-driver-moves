@@ -41,7 +41,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* Auth route, will create an auth code and redirect to /authtoken, where a token is created and stored */
-router.post('/auth', function(req, res, next) {
+router.post('/auth', function(req, res, next) {s
   if (moves.options.accessToken == "") {
     moves.options.clientId = req.body.clientId;
     moves.options.clientSecret = req.body.clientSecret;
@@ -49,8 +49,7 @@ router.post('/auth', function(req, res, next) {
     var url = moves.generateAuthUrl();
     console.log("Attempting to redirect to: " + url);
     // Will redirect to /token with auth code
-    //res.send('<meta http-equiv="refresh" content="0; URL='+url+'/>');
-    res.send("Test Res");
+    res.end('<html><body><p>Redirecting...</p><script>window.top‌​.location.href="' + url + '"</script></body></html>')
   } else {
     res.redirect("/");
   }
