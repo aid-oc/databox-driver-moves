@@ -51,7 +51,7 @@ router.post('/auth', function(req, res, next) {
     // Will redirect to /token with auth code
     res.end('<html><body><p>Redirecting...</p><script>parent.location="' + url + '"</script></body></html>')
   } else {
-    res.redirect("/");
+    res.redirect("/ui");
   }
 });
 
@@ -69,7 +69,7 @@ router.get('/authtoken', function(req, res, next) {
       }).catch(() => {
         console.log("Failed to store token");
       });
-      res.redirect("/");
+      res.redirect("/ui");
     }
   });
 });
