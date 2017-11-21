@@ -97,6 +97,7 @@ router.post('/auth', function(req, res, next) {
   if (moves.options.accessToken == "") {
     moves.options.clientId = req.body.clientId;
     moves.options.clientSecret = req.body.clientSecret;
+    storeAppCredentials(moves.options.clientId, moves.options.clientSecret);
     // Redirect to start auth process
     var url = moves.generateAuthUrl();
     console.log("Attempting to redirect to: " + url);
