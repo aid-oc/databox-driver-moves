@@ -68,7 +68,8 @@ router.get('/authtoken', function(req, res, next) {
       moves.options.accessToken = authData.access_token;
       databox.keyValue.write(storeHref, 'movesToken', authData.access_token).then((res) => {
         console.log("Token stored: " + res);
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err);
         console.log("Failed to store token");
       });
       res.end("<html><head><meta http-equiv=\"refresh\" content=\"0; URL="+AUTH_REDIRECT_URL+"\" /></head></html>");
