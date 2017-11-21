@@ -16,19 +16,69 @@ var AUTH_REDIRECT_URL = "/#!/databox-driver-moves/ui";
 
 function verifyAccessToken() {
   databox.keyValue.read(storeHref, 'movesToken').then((res) => {
-    console.log("Token found: " + res);
+    console.log("Token found: " + res.access_token);
+    // See if the token is still valid
+    moves.options.access_token = res.access_token;
+    moves.verifyToken(function(err) {
+      if (err) {
+        console.log("Token Verify Error: " + err);
+        console.log("Attempting to refresh token...");
+        // Attempt to refresh the token
+        var appCreds = getAppCredentials();
+        if (appCreds != null) {
+          moves.options.clientId = appCreds.id;
+          moves.options.clientSecret = appCreds.secret;
+          // Attempt token refresh using stored app credentials
+          moves.refreshToken(err, authData) {
+            if (err) {
+              console.log("Token Refresh Error: " + err);
+              moves.options.access_token = "";
+            } else {
+              console.log("Token Refreshed");
+              moves.options.accessToken = authData.access_token;
+            }
+          }
+        } else {
+          moves.options.access_token = "";
+        }
+      } else {
+        console.log("Access token is valid " + err);
+      }
+    });
   }).catch(() => {
     console.log("No access token found");
   });
 }
 
+function storeAppCredentials(clientId, clientSecret) {
+  var movesCredentials = {id: clientId, secret: clientSecret};
+  databox.keyValue.write(storeHref, 'movesCredentials', movesCredentials).then((res) => {
+    console.log("Moves crendetials stored: " + res);
+  }).catch((err) => {
+    console.log(err);
+    console.log("Failed to store moves credentials");
+  });
+}
+
+function getAppCredentials() {
+  databox.keyValue.read(storeHref, 'movesCredentials').then((res) => {
+    console.log("Credentials found: " + res);
+    return res;
+  }).catch(() => {
+    console.log("No crendetials found");
+    return null;
+  });
+}
+
 // Entry point, form for credentials input
 router.get('/', function(req, res, next) {
-  // Just check if we have anything
+  // Just check if we have a stored access token which can be refreshed
   verifyAccessToken();
   if (moves.options.accessToken == "") {
+    // Crendentials form, starts the authentication process
     res.render('index', {"title" : "Moves Driver"});
   } else {
+    // We have a valid access token, render some useful data
     var placesOptions = {
       "date": "20171111"
     }
