@@ -22,7 +22,6 @@ function verifyAccessToken() {
 
 // Entry point, form for credentials input
 router.get('/', function(req, res, next) {
-  console.log("In /");
   // Just check if we have anything
   verifyAccessToken();
   if (moves.options.accessToken == "") {
@@ -43,7 +42,6 @@ router.get('/', function(req, res, next) {
 
 /* Auth route, will create an auth code and redirect to /authtoken, where a token is created and stored */
 router.post('/auth', function(req, res, next) {
-  console.log("In /auth");
   if (moves.options.accessToken == "") {
     moves.options.clientId = req.body.clientId;
     moves.options.clientSecret = req.body.clientSecret;
@@ -51,7 +49,7 @@ router.post('/auth', function(req, res, next) {
     var url = moves.generateAuthUrl();
     console.log("Attempting to redirect to: " + url);
     // Will redirect to /token with auth code
-    res.redirect(url);
+    res.send('<meta http-equiv="refresh" content="0; URL='+url+'/>');
   } else {
     res.redirect("/");
   }
@@ -59,8 +57,6 @@ router.post('/auth', function(req, res, next) {
 
 /* Create a token from the current auth code, store it and redirect to show data */
 router.get('/authtoken', function(req, res, next) {
-  console.log("In /authtoken");
-  /*
   // Return to here with an access code, exchange for token
   moves.getAccessToken(req.query.code, function(err, authData) {
     if (err) {
@@ -76,8 +72,6 @@ router.get('/authtoken', function(req, res, next) {
       res.redirect("/");
     }
   });
-  */
-  res.send('Auth Token Page');
 });
 
 
