@@ -49,7 +49,8 @@ router.post('/auth', function(req, res, next) {
     var url = moves.generateAuthUrl();
     console.log("Attempting to redirect to: " + url);
     // Will redirect to /token with auth code
-    res.send('<meta http-equiv="refresh" content="0; URL='+url+'/>');
+    //res.send('<meta http-equiv="refresh" content="0; URL='+url+'/>');
+    res.send("Test Res");
   } else {
     res.redirect("/");
   }
