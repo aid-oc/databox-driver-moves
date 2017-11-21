@@ -66,7 +66,7 @@ router.get('/authtoken', function(req, res, next) {
       res.json(err);
     } else {
       moves.options.accessToken = authData.access_token;
-      databox.keyValue.write(storeHref, 'movesToken', authData.access_token).then((res) => {
+      databox.keyValue.write(storeHref, 'movesToken', authData).then((res) => {
         console.log("Token stored: " + res);
       }).catch((err) => {
         console.log(err);
