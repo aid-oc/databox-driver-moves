@@ -17,7 +17,7 @@ var AUTH_REDIRECT_URL = "/#!/databox-driver-moves/ui";
 
 /** Checks to see if we have an access token stored, this will then be verified and refreshed if necessary 
 (saves re-inputting client details each time */
-function verifyAccessToken() {
+function verifyAccessToken(callback) {
     let isValid = false;
     databox.keyValue.read(storeHref, 'movesToken').then((res) => {
         console.log("Token found: " + res.access_token);
