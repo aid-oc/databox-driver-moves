@@ -22,7 +22,7 @@ function verifyAccessToken() {
     databox.keyValue.read(storeHref, 'movesToken').then((res) => {
         console.log("Token found: " + res.access_token);
         // See if the token is still valid
-        moves.options.access_token = res.access_token;
+        moves.options.accessToken = res.access_token;
         moves.verifyToken(function(err) {
             if (err) {
                 console.log("Token Verify Error: " + err);
