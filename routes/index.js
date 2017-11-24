@@ -23,15 +23,15 @@ function verifyAccessToken(callback) {
         console.log("Token found: " + res.access_token);
         // See if the token is still valid
         moves.options.accessToken = res.access_token;
-        moves.verifyToken(function(err) {
-            if (err) {
-                console.log("Token Verify Error: " + err);
-                console.log("Attempting to refresh token...");
-                // Attempt to refresh the token
-                getAppCredentials(function(storedCreds) {
-                    if (storedCreds != null) {
-                        moves.options.clientId = appCreds.id;
-                        moves.options.clientSecret = appCreds.secret;
+        getAppCredentials(function(storedCreds) {
+            if (storedCreds != null) {
+                moves.options.clientId = appCreds.id;
+                moves.options.clientSecret = appCreds.secret;
+                moves.verifyToken(function(err) {
+                    if (err) {
+                        console.log("Token Verify Error: " + err);
+                        console.log("Attempting to refresh token...");
+                        // Attempt to refresh the token
                         // Attempt token refresh using stored app credentials
                         moves.refreshToken(function(err, authData) {
                             if (err) {
@@ -42,16 +42,18 @@ function verifyAccessToken(callback) {
                                 moves.options.accessToken = authData.access_token;
                                 isValid = true;
                             }
+                            callback(isValid);
                         });
                     } else {
-                        moves.options.access_token = "";
+                        console.log("Access token is valid");
+                        isValid = true;
+                        callback(isValid);
                     }
                 });
             } else {
-                console.log("Access token is valid");
-                isValid = true;
+                moves.options.access_token = "";
+                callback(isValid)
             }
-            callback(isValid);
         });
     }).catch(() => {
         console.log("No access token found");
@@ -79,7 +81,7 @@ function getAppCredentials(callback) {
         console.log("Credentials found: " + res);
         callback(res);
     }).catch(() => {
-        console.log("No crendetials found");
+        console.log("No credentials found");
         callback(null);
     });
 }
@@ -129,19 +131,19 @@ function storeMovesPlaces() {
 router.get('/', function(req, res, next) {
     // Just check if we have a stored access token which can be refreshed
     verifyAccessToken(function(isValid) {
-      if (isValid) {
-        storeMovesProfile(function(movesProfile) {
-            console.log("Showing settings with profile: " + JSON.stringify(movesProfile));
-            res.render('settings', {
-                "title": "Moves Driver",
-                "profile": movesProfile
+        if (isValid) {
+            storeMovesProfile(function(movesProfile) {
+                console.log("Showing settings with profile: " + JSON.stringify(movesProfile));
+                res.render('settings', {
+                    "title": "Moves Driver",
+                    "profile": movesProfile
+                });
             });
-        });
-      } else {
-        res.render('index', {
-            "title": "Moves Driver"
-        });
-      }
+        } else {
+            res.render('index', {
+                "title": "Moves Driver"
+            });
+        }
     });
 });
 
