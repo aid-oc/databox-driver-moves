@@ -11,6 +11,7 @@
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "~4.15.5",
+    "moment": "^2.19.2",
     "morgan": "~1.9.0",
     "moves-api": "0.0.5",
     "node-databox": "^0.5.4",

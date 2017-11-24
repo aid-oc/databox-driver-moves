@@ -4,6 +4,7 @@ var app = require('../app.js');
 var movesApi = require('moves-api').MovesApi;
 var databox = require('node-databox');
 var storeHref = process.env.DATABOX_STORE_ENDPOINT;
+var moment = require('moment');
 var moves = new movesApi({
     "clientId": "",
     "clientSecret": "",
@@ -76,12 +77,15 @@ function getAppCredentials() {
 
 /** Stores some basic information about the moves user, client ID/platform */
 function storeMovesProfile() {
-  var userProfile = moves.getProfile(function(err, profile) {
+  var profile = {};
+  moves.getProfile(function(err, profile) {
     if (err) {
       console.log("Error: Unable to retrieve profile");
     } else {
       var userId = profile.userId;
       var userPlatform = profile.platform;
+      profile.userId = userId;
+      profile.userPlatform = userPlatform;
       databox.keyValue.write(storeHref, 'movesUserId', userId).then((res) => {
         console.log("Stored Crendentials");
       }).catch(() => {
@@ -94,6 +98,22 @@ function storeMovesProfile() {
       });
     }
   });
+  return profile;
+}
+
+/** Store/Update places visisted this month */
+function storeMovesPlaces() {
+  var placesOptions = {
+    month : moment().format("YYYYmm")
+  }
+  console.log("Retrieving Places for: " + current);
+  moves.getPlaces(placesOptions, function(err, places) {
+    databox.keyValue.write(storeHref, 'movesPlaces-'+placesOptions.month, places).then((res) => {
+        console.log("Stored Places: " + JSON.stringify(places));
+      }).catch(() => {
+        console.log("Failed to store places");
+      });
+  });
 }
 
 
@@ -105,17 +125,9 @@ router.get('/', function(req, res, next) {
     // Crendentials form, starts the authentication process
     res.render('index', {"title" : "Moves Driver"});
   } else {
-    // We have a valid access token, render some useful data
-    var placesOptions = {
-      "date": "20171111"
-    }
-    var placesSummary = moves.getPlaces(placesOptions, function(err, body) {
-      if (err) {
-        res.json(err);
-      } else {
-        res.render('places', {"title" : "Moves Driver", "placesData" : body});
-      }
-    });
+    var movesProfile = storeMovesProfile(); 
+    console.log("Showing settings with profile: " + JSON.stringify(movesProfile));
+    res.render('settings', {"title" : "Moves Driver", "profile" : movesProfile});
   }
 });
 
