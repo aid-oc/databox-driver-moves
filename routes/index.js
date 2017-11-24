@@ -32,6 +32,7 @@ function verifyAccessToken(callback) {
                     if (err) {
                         console.log("Token Verify Error: " + err);
                         console.log("Attempting to refresh token...");
+                        moves.options.refreshToken = moves.options.accessToken;
                         // Attempt to refresh the token
                         // Attempt token refresh using stored app credentials
                         moves.refreshToken(function(err, authData) {
@@ -91,23 +92,24 @@ function getAppCredentials(callback) {
 /** Stores some basic information about the moves user, client ID/platform */
 function storeMovesProfile(callback) {
     let movesProfile = {
-        userId: "",
-        userPlatform: ""
+        userId: "Unknown",
+        userPlatform: "Unknown"
     };
     moves.getProfile(function(err, profile) {
         if (err) {
             console.log("Error: Unable to retrieve profile");
         } else {
             movesProfile.userId = profile.userId;
-            movesProfile.userPlatform = profile.platform;
+            movesProfile.userPlatform = profile.profile.platform;
             databox.keyValue.write(storeHref, 'movesUserProfile', movesProfile).then((res) => {
                 console.log("Stored profile");
+                callback(movesProfile);
             }).catch(() => {
                 console.log("Failed to store profile");
+                callback(movesProfile);
             });
         }
     });
-    callback(movesProfile);
 }
 
 /** Store/Update places visisted this month */
@@ -142,6 +144,7 @@ router.get('/', function(req, res, next) {
                 });
             });
         } else {
+            moves.options.accessToken = "";
             res.render('index', {
                 "title": "Moves Driver"
             });
@@ -161,7 +164,7 @@ router.post('/auth', function(req, res, next) {
         // Will redirect to /token with auth code
         res.end('<html><body><p>Redirecting...</p><script>parent.location="' + url + '"</script></body></html>')
     } else {
-        res.end("<html><head><meta http-equiv=\"refresh\" content=\"0; URL=" + AUTH_REDIRECT_URL + "\" /></head></html>");
+        res.end('<html><body><p>Redirecting...</p><script>parent.location="' + AUTH_REDIRECT_URL + '"</script></body></html>')
     }
 });
 
