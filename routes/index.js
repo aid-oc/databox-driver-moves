@@ -45,7 +45,7 @@ function verifyAccessToken() {
           moves.options.access_token = "";
         }
       } else {
-        console.log("Access token is valid " + err);
+        console.log("Access token is valid");
       }
     });
   }).catch(() => {
@@ -76,7 +76,7 @@ function getAppCredentials() {
 }
 
 /** Stores some basic information about the moves user, client ID/platform */
-function storeMovesProfile() {
+function storeMovesProfile(callback) {
   let movesProfile = {
     userId: "",
     userPlatform: ""
@@ -94,7 +94,7 @@ function storeMovesProfile() {
       });
     }
   });
-  return movesProfile;
+  callback(movesProfile);
 }
 
 /** Store/Update places visisted this month */
@@ -124,9 +124,10 @@ router.get('/', function(req, res, next) {
     // Crendentials form, starts the authentication process
     res.render('index', {"title" : "Moves Driver"});
   } else {
-    var movesProfile = storeMovesProfile(); 
-    console.log("Showing settings with profile: " + JSON.stringify(movesProfile));
-    res.render('settings', {"title" : "Moves Driver", "profile" : movesProfile});
+    storeMovesProfile(function(movesProfile) {
+      console.log("Showing settings with profile: " + JSON.stringify(movesProfile));
+      res.render('settings', {"title" : "Moves Driver", "profile" : movesProfile});
+    }); 
   }
 });
 
