@@ -77,24 +77,20 @@ function getAppCredentials() {
 
 /** Stores some basic information about the moves user, client ID/platform */
 function storeMovesProfile() {
-  var profile = {};
+  let movesProfile = {
+    userId: "",
+    userPlatform: ""
+  };
   moves.getProfile(function(err, profile) {
     if (err) {
       console.log("Error: Unable to retrieve profile");
     } else {
-      var userId = profile.userId;
-      var userPlatform = profile.platform;
-      profile.userId = userId;
-      profile.userPlatform = userPlatform;
-      databox.keyValue.write(storeHref, 'movesUserId', userId).then((res) => {
-        console.log("Stored Crendentials");
+      movesProfile.userId = profile.userId;
+      movesProfile.userPlatform = profile.platform;
+      databox.keyValue.write(storeHref, 'movesUserProfile', movesProfile).then((res) => {
+        console.log("Stored profile");
       }).catch(() => {
-        console.log("Failed to store credentials");
-      });
-      databox.keyValue.write(storeHref, 'movesUserPlatform', userPlatform).then((res) => {
-        console.log("Stored Platform");
-      }).catch(() => {
-        console.log("Failed to store platform");
+        console.log("Failed to store profile");
       });
     }
   });
@@ -106,7 +102,8 @@ function storeMovesPlaces() {
   var placesOptions = {
     month : moment().format("YYYYmm")
   }
-  console.log("Retrieving Places for: " + current);
+  let movesPlaces = {};
+  console.log("Retrieving Places for: " + placesOptions.month);
   moves.getPlaces(placesOptions, function(err, places) {
     databox.keyValue.write(storeHref, 'movesPlaces-'+placesOptions.month, places).then((res) => {
         console.log("Stored Places: " + JSON.stringify(places));
@@ -114,6 +111,7 @@ function storeMovesPlaces() {
         console.log("Failed to store places");
       });
   });
+  return movesPlaces;
 }
 
 
