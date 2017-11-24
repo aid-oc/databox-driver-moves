@@ -94,7 +94,7 @@ function storeMovesProfile() {
       });
     }
   });
-  return profile;
+  return movesProfile;
 }
 
 /** Store/Update places visisted this month */
@@ -107,6 +107,7 @@ function storeMovesPlaces() {
   moves.getPlaces(placesOptions, function(err, places) {
     databox.keyValue.write(storeHref, 'movesPlaces-'+placesOptions.month, places).then((res) => {
         console.log("Stored Places: " + JSON.stringify(places));
+        movesPlaces = places;
       }).catch(() => {
         console.log("Failed to store places");
       });
