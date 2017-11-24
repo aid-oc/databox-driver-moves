@@ -20,13 +20,14 @@ var AUTH_REDIRECT_URL = "/#!/databox-driver-moves/ui";
 function verifyAccessToken(callback) {
     let isValid = false;
     databox.keyValue.read(storeHref, 'movesToken').then((res) => {
-        console.log("Token found: " + res.access_token);
+        console.log("Verify: Token found: " + res.access_token);
         // See if the token is still valid
         moves.options.accessToken = res.access_token;
         getAppCredentials(function(storedCreds) {
             if (storedCreds != null) {
-                moves.options.clientId = appCreds.id;
-                moves.options.clientSecret = appCreds.secret;
+                console.log("Verify: Creds found: " + JSON.stringify(storedCreds));
+                moves.options.clientId = storedCreds.id;
+                moves.options.clientSecret = storedCreds.secret;
                 moves.verifyToken(function(err) {
                     if (err) {
                         console.log("Token Verify Error: " + err);
@@ -51,6 +52,7 @@ function verifyAccessToken(callback) {
                     }
                 });
             } else {
+                console.log("Verify: Invalid Credentials")
                 moves.options.access_token = "";
                 callback(isValid)
             }
@@ -80,8 +82,8 @@ function getAppCredentials(callback) {
     databox.keyValue.read(storeHref, 'movesCredentials').then((res) => {
         console.log("Credentials found: " + res);
         callback(res);
-    }).catch(() => {
-        console.log("No credentials found");
+    }).catch((err) => {
+        console.log("No credentials found: " + err);
         callback(null);
     });
 }
