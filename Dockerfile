@@ -7,4 +7,4 @@ LABEL databox.type="driver"
 
 EXPOSE 8080
 
-CMD ["sleep","2147483647"]
+CMD ["npm","start"]
