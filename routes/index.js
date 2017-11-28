@@ -134,6 +134,7 @@ function storeMovesPlaces(callback) {
 
 /** Driver home, will display data with a valid access token or begin authentication if necessary */
 router.get('/', function(req, res, next) {
+    console.log("In /");
     // Just check if we have a stored access token which can be refreshed
     verifyAccessToken(function(isValid) {
         if (isValid) {
