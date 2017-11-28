@@ -134,11 +134,9 @@ function storeMovesPlaces(callback) {
 
 /** Driver home, will display data with a valid access token or begin authentication if necessary */
 router.get('/', function(req, res, next) {
-    console.log("In /");
     // Just check if we have a stored access token which can be refreshed
     verifyAccessToken(function(isValid) {
         if (isValid) {
-            console.log("/ - isValid")
             storeMovesProfile(function(movesProfile) {
                 console.log("User is authenticated - attempting sync for this month");
                 storeMovesPlaces(function(storedPlaces) {
@@ -153,7 +151,6 @@ router.get('/', function(req, res, next) {
                 });
             });
         } else {
-            console.log("/ - !isValid")
             moves.options.accessToken = "";
             res.render('index', {
                 "title": "Moves Driver"
