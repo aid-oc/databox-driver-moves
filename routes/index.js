@@ -113,21 +113,21 @@ function storeMovesProfile(callback) {
 }
 
 /** Store/Update places visisted this month */
-function storeMovesPlaces() {
+function storeMovesPlaces(callback) {
     var placesOptions = {
         month: moment().format("YYYYmm")
     }
-    let movesPlaces = {};
     console.log("Retrieving Places for: " + placesOptions.month);
     moves.getPlaces(placesOptions, function(err, places) {
         databox.keyValue.write(storeHref, 'movesPlaces-' + placesOptions.month, places).then((res) => {
             console.log("Stored Places: " + JSON.stringify(places));
             movesPlaces = places;
+            callback(places);
         }).catch(() => {
-            console.log("Failed to store places");
+            console.log("Failed to store places: " + err);
+            callback(null);
         });
     });
-    return movesPlaces;
 }
 
 
@@ -137,10 +137,16 @@ router.get('/', function(req, res, next) {
     verifyAccessToken(function(isValid) {
         if (isValid) {
             storeMovesProfile(function(movesProfile) {
-                console.log("Showing settings with profile: " + JSON.stringify(movesProfile));
-                res.render('settings', {
-                    "title": "Moves Driver",
-                    "profile": movesProfile
+                console.log("User is authenticated - attempting sync for this month");
+                storeMovesPlaces(function(storedPlaces) {
+                    var syncStatus = (storedPlaces != null) ? "Synced: "+moment() : "Not synced";
+                    console.log(JSON.stringify(storedPlaces));
+                    console.log("Showing settings with profile: " + JSON.stringify(movesProfile));
+                    res.render('settings', {
+                        "title": "Moves Driver",
+                        "profile": movesProfile,
+                        "syncStatus": syncStatus
+                    });
                 });
             });
         } else {
