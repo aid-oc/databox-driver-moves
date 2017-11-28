@@ -97,7 +97,8 @@ function storeMovesProfile(callback) {
     };
     moves.getProfile(function(err, profile) {
         if (err) {
-            console.log("Error: Unable to retrieve profile");
+            console.log("Error: Unable to retrieve profile: " + err);
+            callback(null);
         } else {
             movesProfile.userId = profile.userId;
             movesProfile.userPlatform = profile.profile.platform;
@@ -136,6 +137,7 @@ router.get('/', function(req, res, next) {
     // Just check if we have a stored access token which can be refreshed
     verifyAccessToken(function(isValid) {
         if (isValid) {
+            console.log("/ - isValid")
             storeMovesProfile(function(movesProfile) {
                 console.log("User is authenticated - attempting sync for this month");
                 storeMovesPlaces(function(storedPlaces) {
@@ -150,6 +152,7 @@ router.get('/', function(req, res, next) {
                 });
             });
         } else {
+            console.log("/ - !isValid")
             moves.options.accessToken = "";
             res.render('index', {
                 "title": "Moves Driver"
