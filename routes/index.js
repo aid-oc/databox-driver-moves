@@ -116,7 +116,7 @@ function storeMovesProfile(callback) {
 /** Store/Update places visisted this month */
 function storeMovesPlaces(callback) {
     var placesOptions = {
-        month: moment().format("YYYYmm")
+        month: moment().format("yyyyMM")
     }
     console.log("Retrieving Places for: " + placesOptions.month);
     moves.getPlaces(placesOptions, function(err, places) {
