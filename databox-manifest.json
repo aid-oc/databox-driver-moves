@@ -19,7 +19,8 @@
     "external-whitelist": [
           {
            "urls": [
-            "https://api.moves-app.com/api/1.1"
+            //"https://api.moves-app.com/api/1.1",
+            "https://api.moves-app.com/"
             ],
             "description": "Used to authenticate with Moves to access your activity data"
           }
