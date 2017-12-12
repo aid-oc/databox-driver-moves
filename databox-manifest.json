@@ -2,7 +2,7 @@
 	"manifest-version": 1,
 	"name": "databox-driver-moves",
 	"databox-type": "driver",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "A driver for the Moves API.",
 	"author": "Aidan O'Connell <psyao1@nottingham.ac.uk>",
 	"license": "MIT",
