@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "manifest-version": 1,
 
   "name": "driver-moves",
@@ -37,7 +38,7 @@
   ],
 
   "resource-requirements": {
-    "store": "core-store"
+    "store": "store-json"
   }
 }
 
