@@ -1,31 +1,42 @@
 {
-	"manifest-version": 1,
-	"name": "databox-driver-moves",
-	"databox-type": "driver",
-	"version": "0.2.0",
-	"description": "A driver for the Moves API.",
-	"author": "Aidan O'Connell <psyao1@nottingham.ac.uk>",
-	"license": "MIT",
-	"tags": [
-		"moves",
-		"javascript",
-    "driver"
-	],
-	"homepage": "https://github.com/psyaoc/databox-driver-moves",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/psyaoc/databox-driver-moves"
-	},
-    "external-whitelist": [
-          {
-           "urls": [
-            "https://api.moves-app.com/"
-            ],
-            "description": "Used to authenticate with Moves to access your activity data"
-          }
-       ],
-	"resource-requirements": {
-		"store": ["store-json"]
-	}
+  "manifest-version": 1,
 
+  "name": "driver-moves",
+  "version": "0.3.0",
+
+  "description": "A driver to interact with Moves data",
+  "author": "Aidan O'Connell <psyao1@nottingham.ac.uk> ()",
+  "license": "MIT",
+
+  "databox-type":"driver",
+
+  "tags": [
+    "store",
+    "json",
+  ],
+
+  "homepage": "https://github.com/psyaoc/databox-driver-moves",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psyaoc/databox-driver-moves"
+  },
+
+  "network-permissions": [
+  ],
+
+  "external-whitelist": [
+        {
+          "urls": [
+              "https://api.moves-app.com/",
+          ],
+          "description": "Used to access the Moves API"
+        }
+      ],
+
+  "hardware-permissions": [
+  ],
+
+  "resource-requirements": {
+    "store": ["store-json"]
+  }
 }
