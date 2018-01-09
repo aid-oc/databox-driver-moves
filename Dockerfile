@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:7
 
 ADD . .
 RUN npm install
@@ -7,4 +7,4 @@ LABEL databox.type="driver"
 
 EXPOSE 8080
 
-CMD ["sleep","2147483647"]
+CMD ["npm","start"]

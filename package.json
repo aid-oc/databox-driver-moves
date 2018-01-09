@@ -6,15 +6,16 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "ejs": "~2.5.7",
-    "express": "~4.15.5",
-    "moment": "^2.19.2",
-    "morgan": "~1.9.0",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "debug": "^2.6.9",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "moment": "^2.20.1",
+    "promise": "^7.1.1",
+    "morgan": "^1.9.0",
     "moves-api": "0.0.5",
     "node-databox": "^0.6.0",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "^2.4.5"
   }
 }
