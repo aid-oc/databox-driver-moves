@@ -12,10 +12,6 @@ var index = require('./routes/index');
 
 var app = express();
 
-// JSON Store
-var DATABOX_STORE_BLOB_ENDPOINT = process.env.DATABOX_STORE_ENDPOINT;
-var hasValidToken = false;
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -46,21 +42,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
-// Wait until store is ready and then initalise it
-databox.waitForStoreStatus(DATABOX_STORE_BLOB_ENDPOINT, 'active', 100).then(() => {
-  console.log("DEBUG: Moves-Driver - registerDatasource()");
-  databox.catalog.registerDatasource(
-    DATABOX_STORE_BLOB_ENDPOINT, {
-              description: 'Moves API Storage',
-              contentType: 'text/json',
-              vendor: 'Databox Inc.',
-              type: 'movesApiStorage',
-              datasourceid: 'MovesApiStorage',
-              storeType: 'databox-store-blob',
-            });
-});
-
 
 module.exports = app;

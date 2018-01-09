@@ -3,8 +3,8 @@ var router = express.Router();
 var app = require('../app.js');
 var movesApi = require('moves-api').MovesApi;
 var databox = require('node-databox');
-var storeHref = process.env.DATABOX_STORE_ENDPOINT;
 var moment = require('moment');
+
 var moves = new movesApi({
     "clientId": "",
     "clientSecret": "",
@@ -12,15 +12,37 @@ var moves = new movesApi({
     "accessToken": "",
     "refreshToken": "",
 });
-
 var AUTH_REDIRECT_URL = "/#!/databox-driver-moves/ui";
+
+const DATABOX_ZMQ_ENDPOINT = process.env.DATABOX_ZMQ_ENDPOINT;
+
+/* Set up data stores */
+// Configure Key-Value Store for Driver Settings
+let kvc = databox.NewKeyValueClient(DATABOX_ZMQ_ENDPOINT, false);
+let driverSettings = databox.NewDataSourceMetadata();
+driverSettings.Description = 'Moves driver settings';
+driverSettings.ContentType = 'application/json';
+driverSettings.Vendor = 'psyao1';
+driverSettings.DataSourceType = 'movesSettings';
+driverSettings.DataSourceID = 'movesSettings';
+driverSettings.StoreType = 'kv';
+
+// Register Key-Value Store
+kvc.RegisterDatasource(driverSettings)
+.then(() => {
+  console.log("Registered store: driverSettings");
+})
+.catch((err) => {
+  console.log("Error registering data source:" + err);
+});
 
 /** Checks to see if we have an access token stored, this will then be verified and refreshed if necessary 
 (saves re-inputting client details each time */
 function verifyAccessToken(callback) {
     let isValid = false;
-    databox.keyValue.read(storeHref, 'movesToken').then((res) => {
-        console.log("Verify: Token found: " + res.access_token);
+    kvc.Read('movesToken')
+    .then(()=>{
+      console.log("Verify: Token found: " + res.access_token);
         // See if the token is still valid
         moves.options.accessToken = res.access_token;
         getAppCredentials(function(storedCreds) {
@@ -58,9 +80,10 @@ function verifyAccessToken(callback) {
                 callback(isValid)
             }
         });
-    }).catch(() => {
-        console.log("No access token found");
-        callback(isValid);
+    })
+    .catch((err)=>{
+      console.log("No access token found");
+      callback(isValid);
     });
 }
 
@@ -70,8 +93,8 @@ function storeAppCredentials(clientId, clientSecret) {
         id: clientId,
         secret: clientSecret
     };
-    databox.keyValue.write(storeHref, 'movesCredentials', movesCredentials).then((res) => {
-        console.log("Moves crendetials stored: " + res);
+    kvc.Write('movesCredentials', movesCredentials).then(() => {
+        console.log("Moves crendetials stored");
     }).catch((err) => {
         console.log(err);
         console.log("Failed to store moves credentials");
@@ -80,7 +103,7 @@ function storeAppCredentials(clientId, clientSecret) {
 
 /** Gets the current Client ID/Client Secret for the Moves Application */
 function getAppCredentials(callback) {
-    databox.keyValue.read(storeHref, 'movesCredentials').then((res) => {
+    kvc.Read('movesCredentials').then((res) => {
         console.log("Credentials found: " + res);
         callback(res);
     }).catch((err) => {
@@ -102,25 +125,36 @@ function storeMovesProfile(callback) {
         } else {
             movesProfile.userId = profile.userId;
             movesProfile.userPlatform = profile.profile.platform;
-            databox.keyValue.write(storeHref, 'movesUserProfile', movesProfile).then((res) => {
+            kvc.Write('movesUserProfile', movesProfile).then(() => {
                 console.log("Stored profile");
                 callback(movesProfile);
-            }).catch(() => {
-                console.log("Failed to store profile");
+            }).catch((err) => {
+                console.log("Failed to store profile " + err);
                 callback(movesProfile);
             });
         }
     });
 }
 
+function getMovesProfile(callback) {
+    kvc.Read('movesUserProfile').then((res) => {
+        console.log("User profile found: " + res);
+        callback(res);
+    }).catch((err) => {
+        console.log("No user profile found: " + err);
+        callback(null);
+    });
+}
+
 /** Store/Update places visisted this month */
+/* TODO: Update to use core-store timeseries
 function storeMovesPlaces(callback) {
     var placesOptions = {
         month: moment().format("YYYY-MM")
     }
     console.log("Retrieving Places for: " + placesOptions.month);
     moves.getPlaces(placesOptions, function(err, places) {
-        databox.keyValue.write(storeHref, 'movesPlaces-' + placesOptions.month, places).then((res) => {
+        kvc.Write('movesPlaces-' + placesOptions.month, places).then((res) => {
             console.log("Stored Places: " + JSON.stringify(places));
             movesPlaces = places;
             callback(places);
@@ -130,6 +164,7 @@ function storeMovesPlaces(callback) {
         });
     });
 }
+*/
 
 
 /** Driver home, will display data with a valid access token or begin authentication if necessary */
@@ -138,7 +173,8 @@ router.get('/', function(req, res, next) {
     verifyAccessToken(function(isValid) {
         if (isValid) {
             storeMovesProfile(function(movesProfile) {
-                console.log("User is authenticated - attempting sync for this month");
+                console.log("User is authenticated");
+                /* TODO - Move storeMovesPlaces to core-store timeseries
                 storeMovesPlaces(function(storedPlaces) {
                     var syncStatus = (storedPlaces != null) ? "Synced: "+moment() : "Not synced";
                     console.log(JSON.stringify(storedPlaces));
@@ -148,6 +184,13 @@ router.get('/', function(req, res, next) {
                         "profile": movesProfile,
                         "syncStatus": syncStatus
                     });
+                });
+                */
+                let syncStatus = "synced";
+                res.render('settings', {
+                        "title": "Moves Driver",
+                        "profile": movesProfile,
+                        "syncStatus": syncStatus
                 });
             });
         } else {
@@ -183,7 +226,7 @@ router.get('/authtoken', function(req, res, next) {
             res.json(err);
         } else {
             moves.options.accessToken = authData.access_token;
-            databox.keyValue.write(storeHref, 'movesToken', authData).then((res) => {
+            kvc.Write('movesToken', authData).then((res) => {
                 console.log("Token stored: " + res);
             }).catch((err) => {
                 console.log(err);

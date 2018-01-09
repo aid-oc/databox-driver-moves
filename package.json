@@ -14,7 +14,7 @@
     "moment": "^2.19.2",
     "morgan": "~1.9.0",
     "moves-api": "0.0.5",
-    "node-databox": "^0.5.4",
+    "node-databox": "^0.6.0",
     "serve-favicon": "~2.4.5"
   }
 }
