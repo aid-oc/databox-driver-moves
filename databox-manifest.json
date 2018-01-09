@@ -1,4 +1,3 @@
-
 {
   "manifest-version": 1,
 
@@ -9,11 +8,12 @@
   "author": "Aidan O'Connell <psyao1@nottingham.ac.uk> ()",
   "license": "MIT",
 
-  "databox-type": "driver",
+	"databox-type":"driver",
 
   "tags": [
     "store",
-    "timeseries"
+    "db",
+    "json",
   ],
 
   "homepage": "https://github.com/psyaoc/databox-driver-moves",
@@ -22,17 +22,22 @@
     "url": "git+https://github.com/psyaoc/databox-driver-moves.git"
   },
 
-  "network-permissions": [],
+  "network-permissions": [
+  ],
 
-  "external-whitelist": [{
-    "urls": ["https://api.moves-app.com/"],
-    "description": "Used to access the Moves API"
-  }],
+  "external-whitelist": [
+        {
+          "urls": [
+              "https://api.moves-app.com/"
+          ],
+          "description": "Used to access the Moves API"
+        }
+      ],
 
-  "hardware-permissions": [],
+  "hardware-permissions": [
+  ],
 
   "resource-requirements": {
-    "store": "core-store"
+    "store":"core-store"
   }
 }
-
