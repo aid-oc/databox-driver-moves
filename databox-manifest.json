@@ -1,40 +1,35 @@
+
 {
   "manifest-version": 1,
 
   "name": "driver-moves",
   "version": "0.3.0",
 
-  "description": "A driver to interact with Moves data",
+  "description": "Databox driver to gather data from the Moves API.",
   "author": "Aidan O'Connell <psyao1@nottingham.ac.uk> ()",
   "license": "MIT",
 
-  "databox-type":"driver",
+  "databox-type": "driver",
 
   "tags": [
     "store",
-    "json",
+    "timeseries"
   ],
 
   "homepage": "https://github.com/psyaoc/databox-driver-moves",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/psyaoc/databox-driver-moves"
+    "url": "git+https://github.com/psyaoc/databox-driver-moves.git"
   },
 
-  "network-permissions": [
-  ],
+  "network-permissions": [],
 
-  "external-whitelist": [
-        {
-          "urls": [
-              "https://api.moves-app.com/",
-          ],
-          "description": "Used to access the Moves API"
-        }
-      ],
+  "external-whitelist": [{
+    "urls": "https://api.moves-app.com/",
+    "description": "Used to access the Moves API"
+  }],
 
-  "hardware-permissions": [
-  ],
+  "hardware-permissions": [],
 
   "resource-requirements": {
     "store": "store-json"
