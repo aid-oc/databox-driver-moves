@@ -25,7 +25,7 @@
   "network-permissions": [],
 
   "external-whitelist": [{
-    "urls": "https://api.moves-app.com/",
+    "urls": ["https://api.moves-app.com/"],
     "description": "Used to access the Moves API"
   }],
 
