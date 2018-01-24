@@ -15,7 +15,7 @@
     "promise": "^7.1.1",
     "morgan": "^1.9.0",
     "moves-api": "0.0.5",
-    "node-databox": "^0.6.0",
+    "node-databox": "^0.6.2",
     "serve-favicon": "^2.4.5"
   }
 }

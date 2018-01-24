@@ -11,7 +11,7 @@ var moves = new movesApi({
     "accessToken": "",
     "refreshToken": "",
 });
-var AUTH_REDIRECT_URL = "/#!/driver-moves/ui";
+var AUTH_REDIRECT_URL = "/#!/databox-driver-moves/ui";
 
 const DATABOX_ZMQ_ENDPOINT = process.env.DATABOX_ZMQ_ENDPOINT;
 
