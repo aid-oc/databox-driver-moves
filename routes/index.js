@@ -4,7 +4,6 @@ var app = require('../app.js');
 var movesApi = require('moves-api').MovesApi;
 var databox = require('node-databox');
 var moment = require('moment');
-
 var moves = new movesApi({
     "clientId": "",
     "clientSecret": "",
@@ -16,9 +15,12 @@ var AUTH_REDIRECT_URL = "/#!/driver-moves/ui";
 
 const DATABOX_ZMQ_ENDPOINT = process.env.DATABOX_ZMQ_ENDPOINT;
 
-/* Set up data stores */
-// Configure Key-Value Store for Driver Settings
+
 var kvc = databox.NewKeyValueClient(DATABOX_ZMQ_ENDPOINT, false);
+
+
+// Set up data stores 
+// Configure Key-Value Store for Driver Settings
 var driverSettings = databox.NewDataSourceMetadata();
 driverSettings.Description = 'Moves driver settings';
 driverSettings.ContentType = 'application/json';
@@ -35,6 +37,8 @@ kvc.RegisterDatasource(driverSettings)
 .catch((err) => {
   console.log("Error registering data source:" + err);
 });
+
+
 
 /** Checks to see if we have an access token stored, this will then be verified and refreshed if necessary 
 (saves re-inputting client details each time */
