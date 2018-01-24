@@ -2,7 +2,7 @@
   "manifest-version": 1,
 
   "name": "driver-moves",
-  "version": "0.3.0",
+  "version": "0.3.1",
 
   "description": "Databox driver to gather data from the Moves API.",
   "author": "Aidan O'Connell <psyao1@nottingham.ac.uk> ()",
@@ -12,9 +12,12 @@
 
   "tags": [
     "store",
+    "blob",
     "db",
-    "json"
-  ],
+    "native",
+    "json",
+    "timeseries"
+],
 
   "homepage": "https://github.com/psyaoc/databox-driver-moves",
   "repository": {

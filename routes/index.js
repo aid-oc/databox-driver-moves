@@ -12,14 +12,14 @@ var moves = new movesApi({
     "accessToken": "",
     "refreshToken": "",
 });
-var AUTH_REDIRECT_URL = "/#!/databox-driver-moves/ui";
+var AUTH_REDIRECT_URL = "/#!/driver-moves/ui";
 
 const DATABOX_ZMQ_ENDPOINT = process.env.DATABOX_ZMQ_ENDPOINT;
 
 /* Set up data stores */
 // Configure Key-Value Store for Driver Settings
-let kvc = databox.NewKeyValueClient(DATABOX_ZMQ_ENDPOINT, false);
-let driverSettings = databox.NewDataSourceMetadata();
+var kvc = databox.NewKeyValueClient(DATABOX_ZMQ_ENDPOINT, false);
+var driverSettings = databox.NewDataSourceMetadata();
 driverSettings.Description = 'Moves driver settings';
 driverSettings.ContentType = 'application/json';
 driverSettings.Vendor = 'psyao1';
