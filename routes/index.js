@@ -29,10 +29,22 @@ driverSettings.DataSourceType = 'movesSettings';
 driverSettings.DataSourceID = 'movesSettings';
 driverSettings.StoreType = 'kv';
 
+// Register movesPlaces data source
+var movesPlacesSource = databox.NewDataSourceMetadata();
+movesPlacesSource.Description = 'Moves places history';
+movesPlacesSource.ContentType = 'application/json';
+movesPlacesSource.Vendor = 'psyao1';
+movesPlacesSource.DataSourceType = 'movesPlaces';
+movesPlacesSource.DataSourceID = 'movesPlaces';
+movesPlacesSource.StoreType = 'kv';
+
 // Register Key-Value Store
 kvc.RegisterDatasource(driverSettings)
 .then(() => {
-  console.log("Registered store: driverSettings");
+  console.log("Registered datasource: driverSettings");
+  return kvc.RegisterDatasource(movesPlacesSource);
+}).then(() => {
+    console.log("Registered datasource: movesPlaces");
 })
 .catch((err) => {
   console.log("Error registering data source:" + err);
@@ -155,7 +167,7 @@ function storeMovesPlaces(callback) {
     var placesOptions = {
         month: moment().format("YYYY-MM")
     }
-    let dataSourceId = 'movesPlaces-'+placesOptions.month;
+    let dataSourceId = 'movesPlaces';
     console.log("Retrieving Places for: " + placesOptions.month);
     moves.getPlaces(placesOptions.month, function(err, places) {
         if (err) {
