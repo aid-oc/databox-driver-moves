@@ -155,13 +155,13 @@ function storeMovesPlaces(callback) {
     var placesOptions = {
         month: moment().format("YYYY-MM")
     }
-    let dataSourceId = 'movesPlaces-'+month;
+    let dataSourceId = 'movesPlaces-'+placesOptions.month;
     console.log("Retrieving Places for: " + placesOptions.month);
-    moves.getPlaces(dataSourceId, function(err, places) {
+    moves.getPlaces(placesOptions.month, function(err, places) {
         if (err) {
             console.log("Error retrieving places: " + err);
         } else {
-            kvc.Write('movesPlaces-' + placesOptions.month, places).then((res) => {
+            kvc.Write(dataSourceId + placesOptions.month, places).then((res) => {
             console.log("Stored Places, result:" + res);
             console.log("Places: " + JSON.stringify(places));
             callback(places);
