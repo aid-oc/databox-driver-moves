@@ -173,7 +173,7 @@ function storeMovesPlaces(callback) {
         if (err) {
             console.log("Error retrieving places: " + err);
         } else {
-            kvc.Write(dataSourceId + placesOptions.month, places).then((res) => {
+            kvc.Write(dataSourceId, places).then((res) => {
             console.log("Stored Places, result:" + res);
             console.log("Places: " + JSON.stringify(places));
             callback(places);
