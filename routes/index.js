@@ -17,6 +17,7 @@ const DATABOX_ZMQ_ENDPOINT = process.env.DATABOX_ZMQ_ENDPOINT;
 
 
 var kvc = databox.NewKeyValueClient(DATABOX_ZMQ_ENDPOINT, false);
+let tsc = databox.NewTimeSeriesClient(DATABOX_ZMQ_ENDPOINT, false);
 
 
 // Set up data stores 
@@ -31,20 +32,28 @@ driverSettings.StoreType = 'kv';
 
 // Register movesPlaces data source
 var movesPlacesSource = databox.NewDataSourceMetadata();
-movesPlacesSource.Description = 'Moves places history';
+movesPlacesSource.Description = 'Moves monthly history';
 movesPlacesSource.ContentType = 'application/json';
 movesPlacesSource.Vendor = 'psyao1';
 movesPlacesSource.DataSourceType = 'movesPlaces';
 movesPlacesSource.DataSourceID = 'movesPlaces';
 movesPlacesSource.StoreType = 'kv';
 
+// Register movesPlacesByDay data source
+var movesPlacesDaily = databox.NewDataSourceMetadata();
+movesPlacesDaily.Description = 'Moves daily history';
+movesPlacesDaily.ContentType = 'application/json';
+movesPlacesDaily.Vendor = 'psyao1';
+movesPlacesDaily.DataSourceType = 'movesPlacesDaily';
+movesPlacesDaily.DataSourceID = 'movesPlacesDaily';
+movesPlacesDaily.StoreType = 'ts';
+
 // Register Key-Value Store
 kvc.RegisterDatasource(driverSettings)
 .then(() => {
-  console.log("Registered datasource: driverSettings");
   return kvc.RegisterDatasource(movesPlacesSource);
 }).then(() => {
-    console.log("Registered datasource: movesPlaces");
+  return tsc.RegisterDatasource(movesPlacesDaily);
 })
 .catch((err) => {
   console.log("Error registering data source:" + err);
@@ -177,14 +186,35 @@ function storeMovesPlaces(callback) {
             console.log("Stored Places, result:" + res);
             console.log("Places: " + JSON.stringify(places));
             callback(places);
-        }).catch((err) => {
-            console.log("Failed to store places: " + err);
-            callback(null);
-        });
+            }).catch((err) => {
+                console.log("Failed to store places: " + err);
+                callback(null);
+            });
         }
     });
 }
 
+function storeMovesPlacesByDay(callback, date) {
+    // Date in YYYY-MM-DD
+    // Retrieve places for this date
+    var placesOptions = {
+        day: date
+    }
+    let dataSourceId = 'movesPlacesDaily';
+    console.log("Retrieving Places for: " + placesOptions.day);
+    moves.getPlaces(placesOptions.day, function(err, places) {
+        if (err) {
+            console.log("Error retrieving places: " + err);
+        } else {
+            tsc.Write(dataSourceId, moment(date), places).then((res) => {
+            callback(places);
+            }).catch((err) => {
+                console.log("Failed to store places: " + err);
+                callback(null);
+            });
+        }
+    });
+}
 
 /** Driver home, will display data with a valid access token or begin authentication if necessary */
 router.get('/', function(req, res, next) {
