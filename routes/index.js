@@ -172,13 +172,15 @@ function getMovesProfile(callback) {
 }
 
 function storeMovesPlaces(callback) {
-    // Retrieve places for this month
+    // Retrieve places for the past 27 days
+    //month: moment().format("YYYY-MM")
     var placesOptions = {
-        month: moment().format("YYYY-MM")
+        from : moment().subtract(28, 'day').format("YYYY-MM-DD"),
+        to : moment().format("YYYY-MM-DD")
     }
     let dataSourceId = 'movesPlaces';
-    console.log("Retrieving Places for: " + placesOptions.month);
-    moves.getPlaces(placesOptions.month, function(err, places) {
+    console.log("Retrieving Places for: " + placesOptions.from + " to " + placesOptions.to);
+    moves.getPlaces(placesOptions, function(err, places) {
         if (err) {
             console.log("Error retrieving places: " + err);
         } else {
