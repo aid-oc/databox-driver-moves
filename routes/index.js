@@ -161,6 +161,7 @@ function storeMovesProfile(callback) {
     });
 }
 
+/* Reads the user profile data source id */
 function getMovesProfile(callback) {
     kvc.Read('movesUserProfile').then((res) => {
         console.log("User profile found: " + res);
@@ -171,9 +172,8 @@ function getMovesProfile(callback) {
     });
 }
 
+/* Sends an API request for location history over a 28 day period, Moves permits this in a single request */
 function storeMovesPlaces(callback) {
-    // Retrieve places for the past 27 days
-    //month: moment().format("YYYY-MM")
     var placesOptions = {
         from : moment().subtract(28, 'day').format("YYYY-MM-DD"),
         to : moment().format("YYYY-MM-DD")
@@ -196,6 +196,7 @@ function storeMovesPlaces(callback) {
     });
 }
 
+/* Store a day of location history with the corresponding day as the key */
 function storeMovesPlacesByDay(callback, date) {
     // Date in YYYY-MM-DD
     // Retrieve places for this date
